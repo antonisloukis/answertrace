@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "answertrace"
+version = "0.1.0"
+description = "GitHub Discussions contribution analytics from the command line."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+    { name = "Antonis Loukis" }
+]
+dependencies = []
+
+[project.scripts]
+answertrace = "answertrace.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
