@@ -7,6 +7,7 @@ from answertrace.github import (
     fetch_discussion_comments,
 )
 from answertrace.metrics import build_discussion_impact_metrics
+from answertrace.svg import write_discussion_widget
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -19,6 +20,33 @@ def build_parser() -> argparse.ArgumentParser:
         "username",
         nargs="?",
         help="GitHub username to analyze",
+    )
+
+    parser.add_argument(
+        "--svg",
+        action="store_true",
+        help="Generate a README SVG widget",
+    )
+
+    parser.add_argument(
+        "--output",
+        default="assets/discussion-impact.svg",
+        help=(
+            "SVG output path "
+            "(default: assets/discussion-impact.svg)"
+        ),
+    )
+
+    parser.add_argument(
+        "--accent",
+        default="#58A6FF",
+        help="Primary widget accent color",
+    )
+
+    parser.add_argument(
+        "--accent-alt",
+        default="#22D3EE",
+        help="Secondary widget accent color",
     )
 
     parser.add_argument(
@@ -45,11 +73,19 @@ def main() -> None:
         parser.print_help()
         return
 
-    print(f"Analyzing GitHub Discussions for @{args.username}...")
+    print(
+        f"Analyzing GitHub Discussions for "
+        f"@{args.username}..."
+    )
 
     try:
-        accepted_result = fetch_accepted_answers(args.username)
-        comments_result = fetch_discussion_comments(args.username)
+        accepted_result = fetch_accepted_answers(
+            args.username
+        )
+
+        comments_result = fetch_discussion_comments(
+            args.username
+        )
 
         metrics = build_discussion_impact_metrics(
             accepted_answers=accepted_result["answers"],
@@ -60,14 +96,39 @@ def main() -> None:
         print(f"Error: {exc}")
         return
 
+    if args.svg:
+        output = write_discussion_widget(
+            metrics=metrics,
+            output=args.output,
+            accent=args.accent,
+        )
+
+        print()
+        print(f"Widget generated: {output}")
+        return
+
     print()
     print("GitHub Discussions Impact")
     print("-" * 28)
-    print(f"Accepted Answers:     {metrics.accepted_answers}")
-    print(f"Total Upvotes:        {metrics.total_upvotes}")
-    print(f"Top Community:        {metrics.top_community or 'N/A'}")
+
     print(
-        f"First Accepted:       {format_date(metrics.first_accepted_answer)}"
+        f"Accepted Answers:     "
+        f"{metrics.accepted_answers}"
+    )
+
+    print(
+        f"Total Upvotes:        "
+        f"{metrics.total_upvotes}"
+    )
+
+    print(
+        f"Top Community:        "
+        f"{metrics.top_community or 'N/A'}"
+    )
+
+    print(
+        f"First Accepted:       "
+        f"{format_date(metrics.first_accepted_answer)}"
     )
 
 

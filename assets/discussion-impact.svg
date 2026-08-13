@@ -1,67 +1,4 @@
-from html import escape
-from pathlib import Path
-
-from answertrace.metrics import DiscussionImpactMetrics
-
-
-DEFAULT_ACCENT = "#2F81F7"
-DEFAULT_TEXT = "#F0F6FC"
-DEFAULT_MUTED = "#8B949E"
-DEFAULT_ICON_BG = "#0D1117"
-
-
-def _format_date(metrics: DiscussionImpactMetrics) -> str:
-    if metrics.first_accepted_answer is None:
-        return "—"
-
-    return metrics.first_accepted_answer.strftime("%b %Y")
-
-
-def _format_community(value: str | None) -> str:
-    """
-    Convert raw GitHub repository names into cleaner display names.
-    """
-
-    if not value:
-        return "—"
-
-    aliases = {
-        "community/community": "GitHub Community",
-    }
-
-    return aliases.get(value, value)
-
-
-def _truncate(value: str, max_length: int = 25) -> str:
-    if len(value) <= max_length:
-        return value
-
-    return value[: max_length - 1] + "…"
-
-
-def render_discussion_widget(
-    metrics: DiscussionImpactMetrics,
-    accent: str = DEFAULT_ACCENT,
-    text: str = DEFAULT_TEXT,
-    muted: str = DEFAULT_MUTED,
-    icon_bg: str = DEFAULT_ICON_BG,
-) -> str:
-    accepted_answers = str(metrics.accepted_answers)
-    total_upvotes = str(metrics.total_upvotes)
-
-    formatted_community = _format_community(
-        metrics.top_community
-    )
-
-    top_community = escape(
-        _truncate(formatted_community)
-    )
-
-    first_accepted = escape(
-        _format_date(metrics)
-    )
-
-    return f"""<svg
+<svg
     xmlns="http://www.w3.org/2000/svg"
     width="720"
     height="190"
@@ -83,7 +20,7 @@ def render_discussion_widget(
 
     <style>
 
-        .title {{
+        .title {
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -94,10 +31,10 @@ def render_discussion_widget(
 
             font-size: 15px;
             font-weight: 500;
-            fill: {accent};
-        }}
+            fill: #58A6FF;
+        }
 
-        .value {{
+        .value {
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -108,10 +45,10 @@ def render_discussion_widget(
 
             font-size: 20px;
             font-weight: 600;
-            fill: {text};
-        }}
+            fill: #F0F6FC;
+        }
 
-        .label {{
+        .label {
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -122,10 +59,10 @@ def render_discussion_widget(
 
             font-size: 11px;
             font-weight: 400;
-            fill: {muted};
-        }}
+            fill: #8B949E;
+        }
 
-        .community {{
+        .community {
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -136,8 +73,8 @@ def render_discussion_widget(
 
             font-size: 15px;
             font-weight: 600;
-            fill: {text};
-        }}
+            fill: #F0F6FC;
+        }
 
     </style>
 
@@ -165,7 +102,7 @@ def render_discussion_widget(
         text-anchor="middle"
         class="value"
     >
-        {accepted_answers}
+        0
     </text>
 
     <text
@@ -188,7 +125,7 @@ def render_discussion_widget(
         text-anchor="middle"
         class="value"
     >
-        {total_upvotes}
+        10
     </text>
 
     <text
@@ -213,7 +150,7 @@ def render_discussion_widget(
             cy="0"
             r="34"
             fill="none"
-            stroke="{accent}"
+            stroke="#58A6FF"
             stroke-width="4"
         />
 
@@ -229,7 +166,7 @@ def render_discussion_widget(
         <g clip-path="url(#octocat-clip)">
             <g
                 transform="translate(-23.0 -23.0) scale(2.92)"
-                fill="{icon_bg}"
+                fill="#0D1117"
             >
                 <path d="
                     M8 0
@@ -276,7 +213,7 @@ def render_discussion_widget(
         text-anchor="middle"
         class="community"
     >
-        {top_community}
+        GitHub Community
     </text>
 
     <text
@@ -299,7 +236,7 @@ def render_discussion_widget(
         text-anchor="middle"
         class="value"
     >
-        {first_accepted}
+        —
     </text>
 
     <text
@@ -321,35 +258,9 @@ def render_discussion_widget(
         y1="155"
         x2="700"
         y2="155"
-        stroke="{muted}"
+        stroke="#8B949E"
         stroke-width="0.5"
         opacity="0.25"
     />
 
 </svg>
-"""
-
-
-def write_discussion_widget(
-    metrics: DiscussionImpactMetrics,
-    output: str | Path,
-    accent: str = DEFAULT_ACCENT,
-) -> Path:
-    output_path = Path(output)
-
-    output_path.parent.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    svg = render_discussion_widget(
-        metrics=metrics,
-        accent=accent,
-    )
-
-    output_path.write_text(
-        svg,
-        encoding="utf-8",
-    )
-
-    return output_path

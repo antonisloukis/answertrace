@@ -19,17 +19,28 @@ def build_discussion_impact_metrics(
 ) -> DiscussionImpactMetrics:
     accepted_answers_count = len(accepted_answers)
 
+    # Total upvotes received across ALL Discussion comments.
     total_upvotes = sum(
-        comment.upvotes for comment in discussion_comments
+        comment.upvotes
+        for comment in discussion_comments
     )
+
+    # Count distinct Discussions per repository.
+    unique_discussions = {
+        (comment.repository, comment.discussion_url)
+        for comment in discussion_comments
+    }
 
     repo_counter = Counter(
-        comment.repository for comment in discussion_comments
+        repository
+        for repository, _ in unique_discussions
     )
 
-    top_community: str | None
     if repo_counter:
-        top_community = repo_counter.most_common(1)[0][0]
+        top_community = sorted(
+            repo_counter.items(),
+            key=lambda item: (-item[1], item[0].lower()),
+        )[0][0]
     else:
         top_community = None
 
@@ -38,10 +49,11 @@ def build_discussion_impact_metrics(
         for answer in accepted_answers
     ]
 
-    if accepted_dates:
-        first_accepted_answer = min(accepted_dates)
-    else:
-        first_accepted_answer = None
+    first_accepted_answer = (
+        min(accepted_dates)
+        if accepted_dates
+        else None
+    )
 
     return DiscussionImpactMetrics(
         accepted_answers=accepted_answers_count,
