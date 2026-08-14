@@ -52,7 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--version",
         action="version",
-        version="AnswerTrace 0.1.0",
+        version="AnswerTrace 1.0.0",
     )
 
     return parser
