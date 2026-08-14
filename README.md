@@ -1,5 +1,13 @@
 # AnswerTrace
 
+<a href="https://github.com/marketplace/actions/answertrace">
+  <img
+    src="./assets/marketplace-badge.svg"
+    width="230"
+    alt="Available on GitHub Marketplace"
+  />
+</a>
+
 GitHub Discussions contribution analytics and customizable SVG widgets for developer READMEs.
 
 AnswerTrace analyzes public GitHub Discussions activity and turns it into a lightweight, automatically updated profile widget.

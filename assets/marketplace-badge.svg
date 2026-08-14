@@ -1,0 +1,73 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="230"
+  height="58"
+  viewBox="0 0 230 58"
+  role="img"
+  aria-label="Available on GitHub Marketplace"
+>
+  <rect
+    x="1"
+    y="1"
+    width="228"
+    height="56"
+    rx="10"
+    fill="#0D1117"
+    stroke="#58A6FF"
+    stroke-width="2"
+  />
+
+  <!-- Message / Discussions icon -->
+  <circle
+    cx="30"
+    cy="29"
+    r="17"
+    fill="#161B22"
+    stroke="#58A6FF"
+    stroke-width="1.5"
+  />
+
+  <path
+    d="M22 23.5
+       C22 20.5 24.5 18 27.5 18
+       H33
+       C36 18 38.5 20.5 38.5 23.5
+       V28
+       C38.5 31 36 33.5 33 33.5
+       H29
+       L24.5 38
+       V33
+       C23 32 22 30.5 22 28
+       Z"
+    fill="none"
+    stroke="#58A6FF"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Small heading -->
+  <text
+    x="56"
+    y="22"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="8"
+    font-weight="600"
+    letter-spacing="1"
+    fill="#8B949E"
+  >
+    GITHUB MARKETPLACE
+  </text>
+
+  <!-- Main label -->
+  <text
+    x="56"
+    y="39"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-size="13"
+    font-weight="600"
+    fill="#F0F6FC"
+  >
+    Available on Marketplace
+  </text>
+</svg>
