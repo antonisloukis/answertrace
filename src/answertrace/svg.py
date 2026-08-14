@@ -121,13 +121,13 @@ def render_discussion_widget(
                 Arial,
                 sans-serif;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 500;
             fill: {text};
         }}
     </style>
 
     <!-- MOVE ENTIRE WIDGET DOWN -->
-    <g transform="translate(0 24)">
+    <g transform="translate(0 30)">
 
     <!-- TITLE -->
     <text
