@@ -21,7 +21,7 @@ inputs:
   accent:
     description: "Accent color used by the widget."
     required: false
-    default: "#2F81F7"
+    default: "#58A6FF"
 
 runs:
   using: "composite"

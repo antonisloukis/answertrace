@@ -67,7 +67,7 @@ class DiscussionWidgetTests(unittest.TestCase):
         svg = render_discussion_widget(metrics)
 
         self.assertIn(
-            "#2F81F7",
+            "#58A6FF",
             svg,
         )
 
