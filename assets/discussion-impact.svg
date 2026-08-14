@@ -28,7 +28,7 @@
                 Arial,
                 sans-serif;
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 400;
             fill: #58A6FF;
         }
 
@@ -73,7 +73,7 @@
     </style>
 
     <!-- MOVE ENTIRE WIDGET DOWN -->
-    <g transform="translate(0 30)">
+    <g transform="translate(0 35)">
 
     <!-- TITLE -->
     <text
