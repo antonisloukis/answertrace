@@ -55,8 +55,8 @@ def render_discussion_widget(
     return f"""<svg
     xmlns="http://www.w3.org/2000/svg"
     width="720"
-    height="155"
-    viewBox="0 0 720 155"
+    height="160"
+    viewBox="0 0 720 160"
     role="img"
     aria-labelledby="title description"
 >
@@ -127,7 +127,7 @@ def render_discussion_widget(
     </style>
 
     <!-- MOVE ENTIRE WIDGET DOWN -->
-    <g transform="translate(0 5)">
+    <g transform="translate(0 0)">
 
     <!-- TITLE -->
     <text
@@ -339,9 +339,9 @@ def render_discussion_widget(
     <!-- SUBTLE BOTTOM DIVIDER -->
     <line
         x1="20"
-        y1="155"
+        y1="147"
         x2="700"
-        y2="155"
+        y2="147"
         stroke="{muted}"
         stroke-width="0.5"
         opacity="0.25"
