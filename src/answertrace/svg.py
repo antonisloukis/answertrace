@@ -84,17 +84,14 @@ def render_discussion_widget(
     <style>
 
         .title {{
-            font-family:
+            font:
+                400 13px
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
-                Helvetica,
-                Arial,
                 sans-serif;
 
-            font-size: 13px;
-            font-weight: 500;
-            fill: #58A6FF;
+            fill: #58a6ff;
         }}
 
         .value {{
