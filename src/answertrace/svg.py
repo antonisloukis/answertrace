@@ -4,7 +4,7 @@ from pathlib import Path
 from answertrace.metrics import DiscussionImpactMetrics
 
 
-DEFAULT_ACCENT = "#2F81F7"
+DEFAULT_ACCENT = "#58A6FF"
 DEFAULT_TEXT = "#F0F6FC"
 DEFAULT_MUTED = "#8B949E"
 DEFAULT_ICON_BG = "#0D1117"
@@ -21,7 +21,6 @@ def _format_community(value: str | None) -> str:
     """
     Convert raw GitHub repository names into cleaner display names.
     """
-
     if not value:
         return "—"
 
@@ -49,23 +48,15 @@ def render_discussion_widget(
     accepted_answers = str(metrics.accepted_answers)
     total_upvotes = str(metrics.total_upvotes)
 
-    formatted_community = _format_community(
-        metrics.top_community
-    )
-
-    top_community = escape(
-        _truncate(formatted_community)
-    )
-
-    first_accepted = escape(
-        _format_date(metrics)
-    )
+    formatted_community = _format_community(metrics.top_community)
+    top_community = escape(_truncate(formatted_community))
+    first_accepted = escape(_format_date(metrics))
 
     return f"""<svg
     xmlns="http://www.w3.org/2000/svg"
     width="720"
-    height="145"
-    viewBox="0 0 720 145"
+    height="190"
+    viewBox="0 0 720 190"
     role="img"
     aria-labelledby="title description"
 >
@@ -76,22 +67,23 @@ def render_discussion_widget(
     </desc>
 
     <defs>
-        <clipPath id="octocat-clip">
-            <circle cx="0" cy="0" r="24" />
+        <clipPath id="octocat-inner-clip">
+            <circle cx="0" cy="0" r="24.5" />
         </clipPath>
     </defs>
 
     <style>
-
         .title {{
-            font:
-                400 13px
+            font-family:
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
+                Helvetica,
+                Arial,
                 sans-serif;
-
-            fill: #58a6ff;
+            font-size: 11px;
+            font-weight: 400;
+            fill: {accent};
         }}
 
         .value {{
@@ -102,7 +94,6 @@ def render_discussion_widget(
                 Helvetica,
                 Arial,
                 sans-serif;
-
             font-size: 20px;
             font-weight: 600;
             fill: {text};
@@ -116,7 +107,6 @@ def render_discussion_widget(
                 Helvetica,
                 Arial,
                 sans-serif;
-
             font-size: 11px;
             font-weight: 400;
             fill: {muted};
@@ -130,32 +120,22 @@ def render_discussion_widget(
                 Helvetica,
                 Arial,
                 sans-serif;
-
             font-size: 15px;
             font-weight: 600;
             fill: {text};
         }}
-
     </style>
 
-
-    <!-- ===================================================== -->
     <!-- TITLE -->
-    <!-- ===================================================== -->
-
     <text
         x="20"
-        y="22"
+        y="26"
         class="title"
     >
         GitHub Discussions Impact
     </text>
 
-
-    <!-- ===================================================== -->
     <!-- LEFT: ACCEPTED ANSWERS -->
-    <!-- ===================================================== -->
-
     <text
         x="80"
         y="83"
@@ -174,11 +154,7 @@ def render_discussion_widget(
         Accepted Answers
     </text>
 
-
-    <!-- ===================================================== -->
     <!-- LEFT: TOTAL UPVOTES -->
-    <!-- ===================================================== -->
-
     <text
         x="210"
         y="83"
@@ -197,13 +173,8 @@ def render_discussion_widget(
         Total Upvotes
     </text>
 
-
-    <!-- ===================================================== -->
     <!-- CENTER: GITHUB BADGE -->
-    <!-- ===================================================== -->
-
     <g transform="translate(360 84)">
-
         <!-- outer blue ring -->
         <circle
             cx="0"
@@ -214,59 +185,117 @@ def render_discussion_widget(
             stroke-width="4"
         />
 
-        <!-- inner light circle -->
+                <!-- dark backing for transparent Octocat cutout -->
         <circle
             cx="0"
             cy="0"
             r="28"
-            fill="#E6EDF3"
+            fill="{icon_bg}"
         />
 
-        <!-- GitHub mark clipped inside -->
-        <g clip-path="url(#octocat-clip)">
-            <g
-                transform="translate(-23.0 -23.0) scale(2.92)"
-                fill="{icon_bg}"
-            >
-                <path d="
-                    M8 0
-                    C3.58 0 0 3.58 0 8
-                    c0 3.54 2.29 6.53 5.47 7.59
-                    .4.07.55-.17.55-.38
-                    0-.19-.01-.82-.01-1.49
-                    C3.78 14.2 3.31 13.18 3.31 13.18
-                    c-.36-.92-.88-1.17-.88-1.17
-                    -.72-.49.05-.48.05-.48
-                    .8.06 1.22.82 1.22.82
-                    .71 1.21 1.87.86 2.33.66
-                    .07-.52.28-.86.51-1.06
-                    -1.78-.2-3.64-.89-3.64-3.95
-                    0-.87.31-1.59.82-2.15
-                    -.08-.2-.36-1.02.08-2.12
-                    0 0 .67-.21 2.2.82
-                    A7.65 7.65 0 0 1 8 4.27
-                    c.68 0 1.36.09 2 .27
-                    1.53-1.04 2.2-.82 2.2-.82
-                    .44 1.1.16 1.92.08 2.12
-                    .51.56.82 1.27.82 2.15
-                    0 3.07-1.87 3.75-3.65 3.95
-                    .29.25.54.73.54 1.48
-                    0 1.07-.01 1.93-.01 2.2
-                    0 .21.15.46.55.38
-                    A8.013 8.013 0 0 0 16 8
-                    c0-4.42-3.58-8-8-8
-                    z
-                " />
-            </g>
-        </g>
-
+        <!-- GitHub silhouette traced from the new transparent icon -->
+        <path
+            d="
+                M 181 17
+                L 133 37
+                L 93 64
+                L 58 99
+                L 32 137
+                L 11 186
+                L 1 235
+                L 1 288
+                L 11 337
+                L 20 362
+                L 37 395
+                L 60 427
+                L 79 447
+                L 104 468
+                L 136 488
+                L 173 504
+                L 179 505
+                L 188 502
+                L 192 493
+                L 191 445
+                L 176 448
+                L 151 448
+                L 137 445
+                L 124 439
+                L 112 428
+                L 91 390
+                L 67 368
+                L 69 363
+                L 76 361
+                L 94 364
+                L 116 383
+                L 132 404
+                L 145 412
+                L 156 415
+                L 172 415
+                L 192 409
+                L 198 389
+                L 208 376
+                L 167 367
+                L 138 353
+                L 115 331
+                L 102 308
+                L 98 296
+                L 93 268
+                L 93 234
+                L 100 208
+                L 118 180
+                L 114 161
+                L 114 137
+                L 121 112
+                L 134 111
+                L 153 116
+                L 191 137
+                L 239 129
+                L 273 129
+                L 321 137
+                L 359 116
+                L 378 111
+                L 390 111
+                L 395 122
+                L 399 145
+                L 399 157
+                L 394 180
+                L 411 205
+                L 419 232
+                L 419 271
+                L 414 297
+                L 409 311
+                L 398 330
+                L 374 353
+                L 345 367
+                L 304 375
+                L 315 391
+                L 320 410
+                L 320 495
+                L 325 503
+                L 338 504
+                L 379 486
+                L 421 457
+                L 451 427
+                L 482 381
+                L 500 337
+                L 510 287
+                L 510 235
+                L 500 186
+                L 479 137
+                L 453 99
+                L 418 64
+                L 378 37
+                L 330 17
+                L 279 7
+                L 232 7
+                Z
+            "
+            transform="translate(-28 -28) scale(0.109375)"
+            fill="#E6EDF3"
+        />
     </g>
 
-
-    <!-- ===================================================== -->
     <!-- RIGHT: TOP COMMUNITY -->
-    <!-- ===================================================== -->
-
     <text
         x="500"
         y="83"
@@ -285,11 +314,7 @@ def render_discussion_widget(
         Top Community
     </text>
 
-
-    <!-- ===================================================== -->
     <!-- RIGHT: FIRST ACCEPTED -->
-    <!-- ===================================================== -->
-
     <text
         x="640"
         y="83"
@@ -308,21 +333,16 @@ def render_discussion_widget(
         First Accepted
     </text>
 
-
-    <!-- ===================================================== -->
     <!-- SUBTLE BOTTOM DIVIDER -->
-    <!-- ===================================================== -->
-
     <line
         x1="20"
-        y1="132"
+        y1="155"
         x2="700"
-        y2="132"
+        y2="155"
         stroke="{muted}"
         stroke-width="0.5"
         opacity="0.25"
     />
-
 </svg>
 """
 
