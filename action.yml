@@ -49,3 +49,7 @@ runs:
           --svg \
           --output "$ANSWERTRACE_OUTPUT" \
           --accent "$ANSWERTRACE_ACCENT"
+
+branding:
+  icon: "message-circle"
+  color: "blue"          
