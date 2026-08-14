@@ -81,8 +81,8 @@ def render_discussion_widget(
                 Helvetica,
                 Arial,
                 sans-serif;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 500;
             fill: {accent};
         }}
 
@@ -127,7 +127,7 @@ def render_discussion_widget(
     </style>
 
     <!-- MOVE ENTIRE WIDGET DOWN -->
-    <g transform="translate(0 20)">
+    <g transform="translate(0 24)">
 
     <!-- TITLE -->
     <text
