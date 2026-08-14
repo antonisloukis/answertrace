@@ -55,8 +55,8 @@ def render_discussion_widget(
     return f"""<svg
     xmlns="http://www.w3.org/2000/svg"
     width="720"
-    height="190"
-    viewBox="0 0 720 190"
+    height="155"
+    viewBox="0 0 720 155"
     role="img"
     aria-labelledby="title description"
 >
@@ -127,7 +127,7 @@ def render_discussion_widget(
     </style>
 
     <!-- MOVE ENTIRE WIDGET DOWN -->
-    <g transform="translate(0 35)">
+    <g transform="translate(0 5)">
 
     <!-- TITLE -->
     <text
