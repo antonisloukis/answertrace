@@ -64,8 +64,8 @@ def render_discussion_widget(
     return f"""<svg
     xmlns="http://www.w3.org/2000/svg"
     width="720"
-    height="190"
-    viewBox="0 0 720 190"
+    height="145"
+    viewBox="0 0 720 145"
     role="img"
     aria-labelledby="title description"
 >
@@ -92,9 +92,9 @@ def render_discussion_widget(
                 Arial,
                 sans-serif;
 
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 500;
-            fill: {accent};
+            fill: #58A6FF;
         }}
 
         .value {{
@@ -148,7 +148,7 @@ def render_discussion_widget(
 
     <text
         x="20"
-        y="26"
+        y="22"
         class="title"
     >
         GitHub Discussions Impact
@@ -318,9 +318,9 @@ def render_discussion_widget(
 
     <line
         x1="20"
-        y1="155"
+        y1="132"
         x2="700"
-        y2="155"
+        y2="132"
         stroke="{muted}"
         stroke-width="0.5"
         opacity="0.25"

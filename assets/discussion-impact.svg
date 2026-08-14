@@ -31,7 +31,7 @@
 
             font-size: 15px;
             font-weight: 500;
-            fill: #2F81F7;
+            fill: #58A6FF;
         }
 
         .value {
@@ -150,7 +150,7 @@
             cy="0"
             r="34"
             fill="none"
-            stroke="#2F81F7"
+            stroke="#58A6FF"
             stroke-width="4"
         />
 
