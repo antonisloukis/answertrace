@@ -102,7 +102,7 @@
         text-anchor="middle"
         class="value"
     >
-        0
+        1
     </text>
 
     <text
@@ -125,7 +125,7 @@
         text-anchor="middle"
         class="value"
     >
-        10
+        19
     </text>
 
     <text
@@ -236,7 +236,7 @@
         text-anchor="middle"
         class="value"
     >
-        —
+        Aug 2026
     </text>
 
     <text
