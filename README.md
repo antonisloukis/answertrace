@@ -15,87 +15,113 @@ AnswerTrace analyzes public GitHub Discussions activity and turns it into a ligh
 Built with **Python**, the **GitHub GraphQL API**, and **GitHub Actions**.
 
 <p align="center">
-  <img src="./assets/discussion-impact.svg" alt="AnswerTrace GitHub Discussions Impact widget" width="720">
+  <img
+    src="./assets/discussion-impact.svg"
+    alt="AnswerTrace GitHub Discussions Impact widget"
+    width="720"
+  />
 </p>
 
-## Metrics
+---
 
-AnswerTrace currently tracks:
+## What AnswerTrace Tracks
+
+AnswerTrace currently measures:
 
 - **Accepted Answers** — Discussion replies selected as the accepted answer.
 - **Total Upvotes** — Total upvotes received across your GitHub Discussion comments.
 - **Top Community** — Repository where you participated in the most distinct Discussions.
 - **First Accepted** — Date of your earliest accepted Discussion answer.
 
-## CLI Usage
+The generated widget can be placed directly inside a GitHub profile README or repository README.
 
-Analyze a GitHub user:
+---
 
-```bash
-answertrace USERNAME
+# Quick Start
+
+The recommended setup uses **GitHub Actions** so your AnswerTrace widget updates automatically.
+
+You only need to set it up once.
+
+## Step 1 — Create an `assets` folder
+
+Inside the repository where you want to display AnswerTrace, create:
+
+```text
+assets/
+```
+
+AnswerTrace will generate:
+
+```text
+assets/discussion-impact.svg
+```
+
+inside this directory.
+
+For a GitHub profile README, this will normally be inside your special profile repository:
+
+```text
+YOUR_USERNAME/YOUR_USERNAME
 ```
 
 Example:
 
-```bash
-answertrace antonisloukis
+```text
+antonisloukis/antonisloukis
 ```
 
-Generate an SVG widget:
+---
 
-```bash
-answertrace antonisloukis --svg
-```
+## Step 2 — Create a GitHub token
 
-Choose a custom output path:
+AnswerTrace needs a GitHub token so it can query GitHub Discussions through the GitHub API.
 
-```bash
-answertrace antonisloukis \
-  --svg \
-  --output assets/discussion-impact.svg
-```
+Create a GitHub token with the minimum read access required for the Discussion activity you want AnswerTrace to analyze.
 
-Customize the accent color:
+Do **not** place the token directly inside your workflow or README.
 
-```bash
-answertrace antonisloukis \
-  --svg \
-  --accent "#2F81F7"
-```
+---
 
-## GitHub Action
+## Step 3 — Save the token as a GitHub Actions secret
 
-AnswerTrace can generate and update the widget automatically through GitHub Actions.
+Open the repository where AnswerTrace will run.
 
-```yaml
-- name: Generate AnswerTrace widget
-  uses: antonisloukis/answertrace@v1
-  with:
-    username: YOUR_GITHUB_USERNAME
-    token: ${{ secrets.ANSWERTRACE_TOKEN }}
-    output: assets/discussion-impact.svg
-    accent: "#2F81F7"
-```
-
-### Authentication
-
-Create a read-only GitHub token and save it as a repository Actions secret named:
+Go to:
 
 ```text
+Settings
+→ Secrets and variables
+→ Actions
+→ New repository secret
+```
+
+Create this secret:
+
+```text
+Name:
 ANSWERTRACE_TOKEN
 ```
 
-Never place your token directly inside your workflow, README, or source code.
+Paste your GitHub token into the secret value.
 
-## Automatic Updates
+Your workflow will reference it securely as:
 
-Create the following workflow in your profile or project repository:
+```yaml
+${{ secrets.ANSWERTRACE_TOKEN }}
+```
+
+---
+
+## Step 4 — Create the AnswerTrace workflow
+
+Create this file:
 
 ```text
 .github/workflows/answertrace.yml
 ```
 
-Then add:
+Paste the following workflow:
 
 ```yaml
 name: Update AnswerTrace
@@ -123,13 +149,13 @@ jobs:
           username: YOUR_GITHUB_USERNAME
           token: ${{ secrets.ANSWERTRACE_TOKEN }}
           output: assets/discussion-impact.svg
-          accent: "#2F81F7"
+          accent: "#58A6FF"
 
       - name: Commit updated widget
         shell: bash
         run: |
           if git diff --quiet -- assets/discussion-impact.svg; then
-            echo "Widget is already up to date."
+            echo "AnswerTrace widget is already up to date."
             exit 0
           fi
 
@@ -141,11 +167,47 @@ jobs:
           git push
 ```
 
-This workflow can be run manually and also refreshes the widget automatically on a schedule.
+Replace:
 
-## Add the Widget to a README
+```text
+YOUR_GITHUB_USERNAME
+```
 
-Once AnswerTrace generates the SVG, display it with:
+with your GitHub username.
+
+For example:
+
+```yaml
+username: antonisloukis
+```
+
+---
+
+## Step 5 — Run AnswerTrace for the first time
+
+Open your repository on GitHub.
+
+Go to:
+
+```text
+Actions
+→ Update AnswerTrace
+→ Run workflow
+```
+
+Once the workflow finishes successfully, you should have:
+
+```text
+assets/discussion-impact.svg
+```
+
+inside your repository.
+
+---
+
+## Step 6 — Add the widget to your README
+
+Paste this wherever you want AnswerTrace to appear:
 
 ```html
 <p align="center">
@@ -153,39 +215,357 @@ Once AnswerTrace generates the SVG, display it with:
     src="./assets/discussion-impact.svg"
     alt="GitHub Discussions Impact"
     width="720"
-  >
+  />
 </p>
 ```
 
-## Customization
+Commit the README.
 
-The default AnswerTrace accent is:
+Your AnswerTrace widget is now live.
 
-```text
-#2F81F7
-```
+---
 
-You can choose another hexadecimal color:
+# Automatic Updates
+
+The workflow above includes:
 
 ```yaml
-with:
-  username: YOUR_GITHUB_USERNAME
-  token: ${{ secrets.ANSWERTRACE_TOKEN }}
-  output: assets/discussion-impact.svg
-  accent: "#A371F7"
+schedule:
+  - cron: "17 4 * * *"
 ```
 
-For example:
+This allows GitHub Actions to periodically regenerate the widget.
+
+The workflow:
 
 ```text
-Blue    #2F81F7
-Purple  #A371F7
-Green   #3FB950
-Orange  #D29922
-Red     #F85149
+GitHub Discussions
+        ↓
+AnswerTrace
+        ↓
+Generate SVG
+        ↓
+Detect changes
+        ↓
+Commit updated widget
+        ↓
+README displays new metrics
 ```
 
-## Development
+You can also run the workflow manually at any time through:
+
+```text
+Actions
+→ Update AnswerTrace
+→ Run workflow
+```
+
+---
+
+# Examples
+
+## Example 1 — Minimal GitHub Action
+
+If you only want AnswerTrace to generate the SVG and do not need the complete scheduled workflow:
+
+```yaml
+- name: Generate AnswerTrace widget
+  uses: antonisloukis/answertrace@v1
+  with:
+    username: YOUR_GITHUB_USERNAME
+    token: ${{ secrets.ANSWERTRACE_TOKEN }}
+```
+
+The default output location is:
+
+```text
+assets/discussion-impact.svg
+```
+
+---
+
+## Example 2 — Custom Output Path
+
+You can choose where AnswerTrace writes the generated SVG:
+
+```yaml
+- name: Generate AnswerTrace widget
+  uses: antonisloukis/answertrace@v1
+  with:
+    username: YOUR_GITHUB_USERNAME
+    token: ${{ secrets.ANSWERTRACE_TOKEN }}
+    output: profile/answertrace.svg
+```
+
+Then display it using:
+
+```html
+<img
+  src="./profile/answertrace.svg"
+  alt="GitHub Discussions Impact"
+/>
+```
+
+---
+
+## Example 3 — Custom Accent Color
+
+AnswerTrace supports custom hexadecimal accent colors.
+
+```yaml
+- name: Generate AnswerTrace widget
+  uses: antonisloukis/answertrace@v1
+  with:
+    username: YOUR_GITHUB_USERNAME
+    token: ${{ secrets.ANSWERTRACE_TOKEN }}
+    output: assets/discussion-impact.svg
+    accent: "#A371F7"
+```
+
+Some examples:
+
+```text
+AnswerTrace Blue  #58A6FF
+Purple            #A371F7
+Green             #3FB950
+Orange            #D29922
+Red                #F85149
+```
+
+---
+
+## Example 4 — Complete Profile README Setup
+
+A typical profile repository can look like this:
+
+```text
+YOUR_USERNAME/
+├── .github/
+│   └── workflows/
+│       └── answertrace.yml
+│
+├── assets/
+│   └── discussion-impact.svg
+│
+└── README.md
+```
+
+Your workflow:
+
+```yaml
+name: Update AnswerTrace
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "17 4 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  answertrace:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout profile repository
+        uses: actions/checkout@v7
+
+      - name: Generate AnswerTrace widget
+        uses: antonisloukis/answertrace@v1
+        with:
+          username: YOUR_GITHUB_USERNAME
+          token: ${{ secrets.ANSWERTRACE_TOKEN }}
+          output: assets/discussion-impact.svg
+          accent: "#58A6FF"
+
+      - name: Commit updated widget
+        shell: bash
+        run: |
+          if git diff --quiet -- assets/discussion-impact.svg; then
+            echo "AnswerTrace widget is already up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add assets/discussion-impact.svg
+          git commit -m "chore: update AnswerTrace widget"
+          git push
+```
+
+Your README:
+
+```html
+### Development Metrics
+
+<p align="center">
+  <img
+    src="./assets/discussion-impact.svg"
+    alt="GitHub Discussions Impact"
+    width="720"
+  />
+</p>
+```
+
+---
+
+## Live Example
+
+AnswerTrace is used on the creator's GitHub profile README:
+
+[github.com/antonisloukis](https://github.com/antonisloukis)
+
+The widget is generated automatically through GitHub Actions and refreshed as GitHub Discussions activity changes.
+
+---
+
+# CLI Usage
+
+AnswerTrace can also be used locally from the command line.
+
+## Analyze a GitHub user
+
+```bash
+answertrace USERNAME
+```
+
+Example:
+
+```bash
+answertrace antonisloukis
+```
+
+---
+
+## Generate an SVG
+
+```bash
+answertrace antonisloukis --svg
+```
+
+---
+
+## Choose an output path
+
+```bash
+answertrace antonisloukis \
+  --svg \
+  --output assets/discussion-impact.svg
+```
+
+---
+
+## Change the accent color
+
+```bash
+answertrace antonisloukis \
+  --svg \
+  --accent "#58A6FF"
+```
+
+---
+
+# GitHub Action Inputs
+
+AnswerTrace supports the following inputs.
+
+### `username`
+
+GitHub username whose Discussion activity will be analyzed.
+
+Required:
+
+```yaml
+username: YOUR_GITHUB_USERNAME
+```
+
+---
+
+### `token`
+
+GitHub token used to query Discussion activity.
+
+Required:
+
+```yaml
+token: ${{ secrets.ANSWERTRACE_TOKEN }}
+```
+
+Never hard-code your token.
+
+---
+
+### `output`
+
+Location where the generated SVG will be written.
+
+Optional.
+
+Default:
+
+```text
+assets/discussion-impact.svg
+```
+
+Example:
+
+```yaml
+output: assets/discussion-impact.svg
+```
+
+---
+
+### `accent`
+
+Accent color used by the widget.
+
+Optional.
+
+Default:
+
+```text
+#58A6FF
+```
+
+Example:
+
+```yaml
+accent: "#58A6FF"
+```
+
+---
+
+# How It Works
+
+```text
+GitHub GraphQL API
+        │
+        ▼
+Public Discussion Activity
+        │
+        ▼
+AnswerTrace
+        │
+        ├── Accepted Answers
+        ├── Total Upvotes
+        ├── Top Community
+        └── First Accepted
+        │
+        ▼
+SVG Widget
+        │
+        ▼
+GitHub README
+```
+
+AnswerTrace handles paginated GitHub GraphQL results so users with larger Discussion histories can still be analyzed.
+
+---
+
+# Development
 
 Clone AnswerTrace:
 
@@ -236,9 +616,11 @@ Generate a widget:
 answertrace antonisloukis --svg
 ```
 
-## Testing
+---
 
-Run the full test suite:
+# Testing
+
+Run the complete test suite:
 
 ```bash
 python -m unittest discover -s tests -v
@@ -246,7 +628,9 @@ python -m unittest discover -s tests -v
 
 AnswerTrace also uses GitHub Actions CI to automatically run tests on pushes and pull requests to `main`.
 
-## Project Structure
+---
+
+# Project Structure
 
 ```text
 answertrace/
@@ -256,7 +640,8 @@ answertrace/
 │       └── update-widget.yml
 │
 ├── assets/
-│   └── discussion-impact.svg
+│   ├── discussion-impact.svg
+│   └── marketplace-badge.svg
 │
 ├── src/
 │   └── answertrace/
@@ -278,50 +663,103 @@ answertrace/
 └── README.md
 ```
 
-## How It Works
+---
 
-```text
-GitHub GraphQL API
-        │
-        ▼
-Discussion activity
-        │
-        ▼
-AnswerTrace
-        │
-        ├── Accepted Answers
-        ├── Total Upvotes
-        ├── Top Community
-        └── First Accepted
-        │
-        ▼
-SVG Widget
-        │
-        ▼
-GitHub README
-```
-
-AnswerTrace handles paginated GitHub GraphQL results so accounts with larger Discussion histories can still be analyzed.
-
-## Privacy & Security
+# Privacy & Security
 
 AnswerTrace reads GitHub Discussions activity through the GitHub API.
 
-It does not require authentication tokens to be stored in source code.
+Authentication tokens should never be stored directly in:
 
-For GitHub Actions, tokens should always be provided through encrypted repository secrets such as:
+```text
+README files
+workflow source
+Python source
+committed configuration files
+```
+
+For GitHub Actions, store the token using an encrypted repository secret:
 
 ```text
 ANSWERTRACE_TOKEN
 ```
 
-Use the minimum permissions required for your token.
+and reference it as:
 
-## Contributing
+```yaml
+${{ secrets.ANSWERTRACE_TOKEN }}
+```
+
+Use the minimum permissions necessary for your token.
+
+---
+
+# Troubleshooting
+
+## The workflow cannot authenticate
+
+Check that the repository contains this Actions secret:
+
+```text
+ANSWERTRACE_TOKEN
+```
+
+and that your workflow uses:
+
+```yaml
+token: ${{ secrets.ANSWERTRACE_TOKEN }}
+```
+
+---
+
+## The widget does not appear
+
+Confirm that this file exists:
+
+```text
+assets/discussion-impact.svg
+```
+
+and that your README points to the same location:
+
+```html
+<img src="./assets/discussion-impact.svg" />
+```
+
+---
+
+## The widget is not updating
+
+Open:
+
+```text
+Actions
+→ Update AnswerTrace
+```
+
+and manually run the workflow.
+
+Check the workflow logs for authentication or GitHub API errors.
+
+---
+
+## There are no changes to commit
+
+This message is normal:
+
+```text
+AnswerTrace widget is already up to date.
+```
+
+It means the generated metrics are identical to the existing widget.
+
+---
+
+# Contributing
 
 Contributions, bug reports, and feature suggestions are welcome.
 
-If you would like to contribute:
+To contribute:
 
 1. Fork the repository.
 2. Create a new branch.
@@ -329,7 +767,9 @@ If you would like to contribute:
 4. Run the test suite.
 5. Open a pull request.
 
-## License
+---
+
+# License
 
 AnswerTrace is released under the **MIT License**.
 
